@@ -1,0 +1,9 @@
+jobs/
+android/
+samples_*/
+tests/
+.pytest_cache/
+__pycache__/
+*.pyc
+web.log
+.git/

@@ -1,0 +1,12 @@
+# Render.com blueprint: New + > Blueprint > pick this repo. Free plan: sleeps after 15 min idle, wakes on visit.
+services:
+  - type: web
+    name: multitranslate
+    runtime: docker
+    plan: free
+    envVars:
+      - key: MT_PUBLIC
+        value: "1"
+      - key: MT_JOB_TTL_HOURS
+        value: "12"
+    healthCheckPath: /health

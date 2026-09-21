@@ -1,0 +1,5 @@
+Welcome to our store.
+
+We sell handmade soaps.
+Price: 199
+Visit https://example.com

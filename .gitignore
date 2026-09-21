@@ -1,0 +1,11 @@
+__pycache__/
+.pytest_cache/
+jobs/
+web.log
+android/build/
+android/.gradle/
+android/app/build/
+android/local.properties
+*.pyc
+android/keystore/
+android/keystore.properties

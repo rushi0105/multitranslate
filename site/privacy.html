@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How MultiTranslate and this website handle your data.">
+<title>Privacy policy — MultiTranslate</title>
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+  :root { --paper:#FBFAF6; --card:#fff; --mist:#E6E4DD; --ink:#17203F; --ink-2:#3A4570; --muted:#5F6578; --saffron-text:#B45D07;
+    --display:"Baloo 2","Nunito Sans",system-ui,sans-serif; --body:"Nunito Sans",system-ui,sans-serif; }
+  @media (prefers-color-scheme: dark) { :root { --paper:#0F1426; --card:#171D36; --mist:#2A3252; --ink:#EEF0FA; --ink-2:#C9CEE8; --muted:#A5ACC8; --saffron-text:#F2A64C; } }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.6; padding-inline:20px; padding-block:0 60px; }
+  .wrap { max-width:760px; margin:0 auto; }
+  nav { display:flex; align-items:center; justify-content:space-between; padding:20px 0; gap:12px; flex-wrap:wrap; }
+  .brand { font-family:var(--display); font-weight:800; font-size:24px; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:10px; }
+  .brand span { color:var(--saffron-text); }
+  nav .links a { color:var(--ink-2); font-weight:700; font-size:14px; text-decoration:none; margin-left:16px; }
+  nav .links a:focus-visible, a:focus-visible { outline:3px solid var(--saffron-text); outline-offset:2px; }
+  h1 { font-family:var(--display); font-size:34px; margin:24px 0 4px; line-height:1.1; }
+  .updated { color:var(--muted); font-size:14px; margin:0 0 24px; }
+  h2 { font-family:var(--display); font-size:21px; margin:28px 0 6px; }
+  p, li { color:var(--ink-2); }
+  a { color:var(--ink); }
+  .fill { background:#FDF1E2; color:#7A3E00; border-radius:8px; padding:2px 6px; font-weight:700; }
+  @media (prefers-color-scheme: dark) { .fill { background:#3A2A16; color:#F2A64C; } }
+  footer { color:var(--muted); font-size:13px; margin-top:40px; padding-top:16px; border-top:1px solid var(--mist); }
+  footer a { color:var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a href="index.html" class="brand"><img src="logo.png" alt="MultiTranslate logo" width="34" height="34" style="border-radius:8px">Multi<span>Translate</span></a>
+    <div class="links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refund.html">Refunds</a><a href="cookies.html">Cookies</a></div>
+  </nav>
+  <main>
+    <h1>Privacy policy</h1>
+    <p class="updated">Last updated: 21 September 2026</p>
+
+    <h2>The short version</h2>
+    <p>You can use MultiTranslate in two ways. <strong>Online</strong> (this website): the files you upload are stored on our server only while they are being translated and are deleted automatically after 12 hours; there are no accounts. <strong>On your own laptop</strong>: nothing is sent to us at all. In both cases the text lines being translated are sent to a third-party translation service. This website has no cookies, no analytics and no advertising.</p>
+
+    <h2>1. Who we are</h2>
+    <p>This website and the MultiTranslate software are operated by <span class="fill">[BUSINESS OR PERSON NAME]</span>, <span class="fill">[Street, City, State, PIN]</span>, India. Contact: <a href="mailto:[EMAIL]">[EMAIL]</a>.</p>
+
+    <h2>2. Using the online version</h2>
+    <ul>
+      <li><strong>Uploaded files and results</strong> are stored on our server (hosted by <span class="fill">[HOSTING PROVIDER]</span>) in a folder that only your browser can reach through a random job link. They are deleted automatically 12 hours after the job was created, or earlier when you press Delete. We do not open, read or share them.</li>
+      <li><strong>Text lines</strong> from your files are sent to the third-party translation service the tool uses (currently public endpoints of Google Translate and MyMemory / Translated S.r.l.), which process them under their own privacy policies. Do not upload confidential or sensitive personal data if that is not acceptable to you.</li>
+      <li><strong>A translation cache</strong> on the server keeps translated lines (text and translation, no file names, no identity) so repeated lines are not sent again. It is not linked to you.</li>
+      <li><strong>Job history</strong> is kept in your own browser's local storage (a list of job ids). Clearing your browser data removes it.</li>
+      <li><strong>Server logs</strong> (IP address, time, requested URL, browser type) may be kept by the hosting provider for security and to keep the service running, typically for a few days.</li>
+      <li>We do not set cookies, do not run analytics or advertising scripts, and do not embed social-media widgets. Fonts are loaded from Google Fonts, so Google receives your IP address when the font files are requested (<a href="https://policies.google.com/privacy" rel="noopener">Google's privacy policy</a>).</li>
+    </ul>
+
+    <h2>3. Using the software on your own computer</h2>
+    <ul>
+      <li>Your files stay on your computer and are never sent to us.</li>
+      <li>Text lines being translated are sent to the same third-party translation services as above.</li>
+      <li>A local cache of translated lines and a local job history are stored on your computer; delete them with <code>python translate.py --clear-cache</code> or by deleting the folders.</li>
+      <li>The software contains no telemetry, crash reporting or update checks.</li>
+    </ul>
+
+    <h2>4. Your rights</h2>
+    <p>We do not build profiles of users. Uploaded files are deleted automatically within 12 hours; you can delete a job earlier from the app. If you believe we hold data about you (for example from an email you sent us), write to <a href="mailto:[EMAIL]">[EMAIL]</a> and we will respond within 30 days. Users in India may exercise their rights under the Digital Personal Data Protection Act, 2023; users in the EU/UK under the GDPR.</p>
+
+    <h2>5. Children</h2>
+    <p>This website and software are not directed at children under 18 and we do not knowingly collect data from them.</p>
+
+    <h2>6. Changes</h2>
+    <p>If this policy changes, the new version will be published on this page with an updated date.</p>
+ 
+  </main>
+  <footer>© 2026 MultiTranslate · <a href="index.html">Home</a> · Operated by <span class="fill">[BUSINESS OR PERSON NAME]</span>, <span class="fill">[City, State]</span>, India · <a href="mailto:[EMAIL]">[EMAIL]</a></footer>
+</div>
+</body>
+</html>
