@@ -28,6 +28,7 @@ from pathlib import Path
 from flask import Flask, abort, jsonify, render_template, request, send_file, send_from_directory
 from werkzeug.utils import secure_filename
 
+from mt.convert import MIME, convert, options_for
 from mt.engine import DEFAULT_AUTOSAVE, DEFAULT_RPS, DEFAULT_WORKERS
 from mt.languages import FEATURED, LANGUAGES, NATIVE_NAMES, parse_language_list
 from mt.runner import JobOptions, JobStatus, run_job
@@ -208,9 +209,7 @@ def _app_page():
 
 @app.get("/")
 def index():
-    """Hosted: the website. Local: straight into the tool."""
-    if PUBLIC and (SITE_DIR / "index.html").exists():
-        return send_from_directory(SITE_DIR, "index.html")
+    """The tool is the website: drop zone first, everything else below it."""
     return _app_page()
 
 
@@ -253,7 +252,7 @@ def health():
 def manifest():
     return jsonify({
         "name": "MultiTranslate", "short_name": "Translate", "start_url": "/app" if PUBLIC else "/", "display": "standalone",
-        "background_color": "#FBFAF6", "theme_color": "#17203F",
+        "background_color": "#F8FAFC", "theme_color": "#2563EB",
         "icons": [{"src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png"},
                   {"src": "/static/icon-512.png", "sizes": "512x512", "type": "image/png"}]})
 
@@ -338,7 +337,9 @@ def job_status(job_id: str):
     job = JOBS.get(job_id) or abort(404)
     data = job.status.as_dict()
     out = job.options.output
-    data["outputs"] = [Path(p).relative_to(out).as_posix() for p in job.status.outputs if Path(p).exists()]
+    outputs = [Path(p) for p in job.status.outputs if Path(p).exists()]
+    data["outputs"] = [q.relative_to(out).as_posix() for q in outputs]
+    data["formats"] = {q.relative_to(out).as_posix(): list(options_for(q)) for q in outputs}
     data["output_dir"] = str(out)
     data["options"] = {"targets": job.options.targets, "mode": job.options.mode, "input": str(job.options.input)}
     return jsonify(data)
@@ -383,6 +384,13 @@ def download_file(job_id: str, rel: str):
     path = (root / rel).resolve()
     if root not in path.parents or not path.is_file() or path.name == ".progress.json":
         abort(404)
+    wanted = request.args.get("as", "").lower()
+    if wanted and wanted != path.suffix.lower():
+        if wanted not in options_for(path):
+            abort(400, "that format is not available for this file")
+        data = convert(path, wanted)
+        return send_file(io.BytesIO(data), as_attachment=True, download_name=path.stem + wanted,
+                         mimetype=MIME.get(wanted, "application/octet-stream"))
     return send_file(path, as_attachment=True)
 
 

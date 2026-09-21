@@ -3,443 +3,428 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#17203F">
+<meta name="theme-color" content="#2563EB">
+<meta name="description" content="Translate Excel, CSV, Word, text and subtitle files into Hindi, Punjabi, English and 45+ languages. Free, no account.">
 <title>MultiTranslate</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/static/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/static/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhai+2:wght@500;700&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper:#FBFAF6; --card:#FFFFFF; --mist:#E6E4DD; --ink:#17203F; --indigo:#3D4FA1; --indigo-soft:#E9ECF8;
-    --saffron:#E8891D; --saffron-text:#A85606; --saffron-soft:#FDF1E2; --leaf:#2F855A; --leaf-soft:#E6F4EC; --rust:#C0392B; --rust-soft:#FBE9E7;
-    --muted:#6B7080; --radius:14px;
-    --display:"Baloo 2","Baloo Bhai 2","Nunito Sans",system-ui,sans-serif;
-    --body:"Nunito Sans","Baloo 2","Baloo Bhai 2",system-ui,sans-serif;
-    --mono:"JetBrains Mono",Consolas,monospace;
+    --bg:#F8FAFC; --card:#FFFFFF; --fg:#0F172A; --muted:#5B6478; --border:#E2E8F0;
+    --primary:#2563EB; --primary-dark:#1D4ED8; --primary-soft:#EAF1FF; --accent:#D97706; --accent-soft:#FEF3E2; --accent-text:#9A5B00;
+    --ok:#15803D; --ok-soft:#E7F6EC; --bad:#DC2626; --bad-soft:#FDECEC;
+    --font:"Plus Jakarta Sans", system-ui, "Segoe UI", sans-serif; --r:18px;
   }
   * { box-sizing:border-box; }
   html { scroll-behavior:smooth; }
-  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); font-size:15px; line-height:1.5; }
-  a { color:var(--indigo); }
-  button { font-family:inherit; font-size:14px; font-weight:700; border:0; border-radius:10px; padding:10px 16px; cursor:pointer; }
-  button:focus-visible, input:focus-visible, select:focus-visible, .lang:focus-visible { outline:3px solid var(--saffron); outline-offset:2px; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family:var(--font); font-size:16px; line-height:1.5; }
+  a { color:var(--primary); }
+  button { font-family:inherit; font-size:15px; font-weight:700; border:0; border-radius:12px; padding:11px 16px; cursor:pointer; transition:background .2s, transform .15s; }
   button:disabled { opacity:.45; cursor:not-allowed; }
-  .btn-main { background:var(--ink); color:#fff; width:100%; padding:14px; font-size:17px; font-family:var(--display); border-radius:12px; }
-  .btn-main:hover:not(:disabled) { background:var(--indigo); }
-  .btn-soft { background:var(--indigo-soft); color:var(--indigo); }
-  .btn-stop { background:var(--rust-soft); color:var(--rust); }
-  .btn-sm { padding:6px 10px; font-size:12px; border-radius:8px; }
-
-  header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 20px 6px; max-width:1180px; margin:0 auto; flex-wrap:wrap; }
-  .brand { font-family:var(--display); font-weight:800; font-size:30px; letter-spacing:-.01em; line-height:1; }
-  .brand span { color:var(--saffron-text); }
-  .tag { color:var(--muted); font-size:13px; margin-top:2px; }
+  :focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+  .b-primary { background:var(--primary); color:#fff; } .b-primary:hover:not(:disabled) { background:var(--primary-dark); }
+  .b-soft { background:var(--primary-soft); color:var(--primary-dark); } .b-soft:hover { background:#DCE8FF; }
+  .b-ghost { background:transparent; color:var(--muted); padding:8px 10px; } .b-ghost:hover { color:var(--fg); }
+  .b-danger { background:var(--bad-soft); color:var(--bad); }
+  .sm { padding:7px 11px; font-size:13px; border-radius:9px; }
   .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
-  .lan { font-family:var(--mono); font-size:12px; background:var(--card); border:1px solid var(--mist); border-radius:999px; padding:6px 12px; color:var(--muted); }
-  .lan b { color:var(--ink); font-weight:600; }
+  .wrap { max-width:760px; margin:0 auto; padding:0 16px 80px; }
 
-  main { max-width:1180px; margin:0 auto; padding:10px 20px 80px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,400px); gap:22px; align-items:start; }
-  @media (max-width:900px) { main { grid-template-columns:1fr; } .rail { position:static !important; } }
-  .rail { position:sticky; top:16px; display:flex; flex-direction:column; gap:14px; }
+  header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0 8px; }
+  .brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:22px; text-decoration:none; color:var(--fg); }
+  .brand img { width:36px; height:36px; border-radius:10px; }
+  .brand span { color:var(--primary); }
+  header nav { display:flex; gap:4px; }
+  header nav a { text-decoration:none; color:var(--muted); font-weight:600; font-size:14px; padding:8px 10px; border-radius:9px; }
+  header nav a:hover { background:var(--card); color:var(--fg); }
 
-  .step { background:var(--card); border:1px solid var(--mist); border-radius:var(--radius); padding:18px 20px 20px; margin-bottom:16px; }
-  .step-head { display:flex; align-items:baseline; gap:12px; margin-bottom:12px; }
-  .step-num { font-family:var(--display); font-weight:800; font-size:14px; color:#fff; background:var(--indigo); border-radius:8px; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; flex:none; }
-  .step-head h2 { font-family:var(--display); font-weight:700; font-size:21px; margin:0; }
-  .step-head .hint { color:var(--muted); font-size:13px; }
+  h1 { font-size:clamp(28px,6vw,40px); line-height:1.1; margin:26px 0 8px; font-weight:800; letter-spacing:-.02em; text-wrap:balance; }
+  h1 em { font-style:normal; color:var(--primary); }
+  .lead { color:var(--muted); font-size:17px; margin:0 0 22px; }
 
-  #drop { border:2px dashed #C9CDE3; background:var(--indigo-soft); border-radius:12px; padding:26px 16px; text-align:center; cursor:pointer; transition:.15s; }
-  #drop.over { border-color:var(--saffron); background:var(--saffron-soft); }
-  #drop b { font-family:var(--display); font-size:18px; }
-  #drop small { display:block; color:var(--muted); margin-top:4px; }
+  .block { background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:18px; margin-bottom:14px; box-shadow:0 1px 2px rgba(15,23,42,.04); }
+  .block h2 { font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:0 0 12px; font-weight:700; display:flex; align-items:center; gap:10px; }
+  .block h2 .n { width:24px; height:24px; border-radius:8px; background:var(--primary); color:#fff; display:inline-grid; place-items:center; font-size:13px; }
+  .block h2 .done { background:var(--ok); }
+
+  #drop { border:2px dashed #93B4F5; background:var(--primary-soft); border-radius:14px; padding:34px 16px; text-align:center; cursor:pointer; transition:.2s; }
+  #drop:hover, #drop.over { background:#DCE8FF; border-color:var(--primary); }
+  #drop svg { width:44px; height:44px; color:var(--primary); margin-bottom:6px; }
+  #drop b { display:block; font-size:19px; }
+  #drop small { color:var(--muted); font-size:14px; }
   #drop input { display:none; }
-  .or { text-align:center; color:var(--muted); font-size:12px; margin:12px 0 6px; letter-spacing:.1em; text-transform:uppercase; }
-  input[type=text], input[type=number], select { width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--mist); background:#fff; font:inherit; color:var(--ink); }
-  .filelist { margin-top:10px; font-size:13px; color:var(--muted); }
-  .filelist .pill { display:inline-block; background:var(--paper); border:1px solid var(--mist); border-radius:8px; padding:2px 8px; margin:2px 4px 2px 0; font-family:var(--mono); font-size:12px; color:var(--ink); }
-  .filelist .clear { color:var(--rust); cursor:pointer; margin-left:6px; }
+  .files { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .file { display:inline-flex; align-items:center; gap:8px; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:7px 10px; font-size:13px; font-weight:600; max-width:100%; }
+  .file span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .file .x { color:var(--muted); cursor:pointer; font-size:16px; line-height:1; }
+  .path { margin-top:10px; }
+  .path summary { font-size:13px; color:var(--muted); cursor:pointer; }
+  input[type=text], input[type=number], input[type=search], select { width:100%; padding:11px 13px; border-radius:11px; border:1px solid var(--border); background:#fff; font:inherit; color:var(--fg); }
 
-  .langs { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
-  .lang { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1.5px solid var(--mist); border-radius:12px; background:#fff; cursor:pointer; user-select:none; text-align:left; font-weight:600; }
-  .lang .native { font-family:var(--display); font-size:19px; line-height:1.1; font-weight:700; }
-  .lang .en { font-size:11px; color:var(--muted); font-weight:600; display:block; }
-  .lang .tick { width:22px; height:22px; border-radius:7px; border:1.5px solid var(--mist); flex:none; display:grid; place-items:center; color:#fff; font-size:14px; }
-  .lang[aria-pressed=true] { border-color:var(--saffron); background:var(--saffron-soft); }
-  .lang[aria-pressed=true] .tick { background:var(--saffron); border-color:var(--saffron); }
-  .lang .del { margin-left:auto; color:var(--muted); font-size:16px; padding:0 4px; }
-  .more-toggle { margin-top:10px; background:none; color:var(--indigo); padding:6px 0; font-weight:700; }
-  .selected-line { margin-top:12px; font-size:13px; color:var(--muted); }
-  .selected-line b { color:var(--ink); font-family:var(--display); font-size:15px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; min-height:44px; }
+  .chip { display:inline-flex; align-items:center; gap:8px; padding:9px 12px 9px 14px; border-radius:999px; font-weight:700; font-size:15px; border:1.5px solid var(--border); background:#fff; cursor:pointer; transition:.15s; }
+  .chip:hover { border-color:var(--primary); }
+  .chip.on { background:var(--primary); border-color:var(--primary); color:#fff; }
+  .chip.on .x { opacity:.8; }
+  .chip .x { font-size:16px; line-height:1; }
+  .chip.add { border-style:dashed; color:var(--primary-dark); background:var(--primary-soft); }
+  .picker { position:relative; margin-top:12px; }
+  .picker ul { position:absolute; z-index:20; top:100%; left:0; right:0; background:#fff; border:1px solid var(--border); border-radius:12px; margin:6px 0 0; padding:6px; list-style:none; max-height:260px; overflow:auto; box-shadow:0 12px 30px -12px rgba(15,23,42,.3); }
+  .picker li { padding:9px 12px; border-radius:8px; cursor:pointer; display:flex; justify-content:space-between; gap:10px; font-weight:600; }
+  .picker li:hover, .picker li.active { background:var(--primary-soft); }
+  .picker li small { color:var(--muted); font-weight:500; }
 
   .modes { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  @media (max-width:560px) { .modes { grid-template-columns:1fr; } }
-  .mode { border:1.5px solid var(--mist); border-radius:12px; padding:12px 14px; cursor:pointer; background:#fff; }
-  .mode input { margin-right:8px; accent-color:var(--saffron); }
-  .mode .t { font-family:var(--display); font-weight:700; font-size:17px; }
-  .mode .d { color:var(--muted); font-size:13px; margin-top:2px; margin-left:22px; }
-  .mode.on { border-color:var(--saffron); background:var(--saffron-soft); }
-  .sub-opt { margin-top:10px; padding:10px 14px; background:var(--paper); border-radius:10px; font-size:13px; color:var(--muted); display:flex; gap:16px; flex-wrap:wrap; }
-  .sub-opt input { accent-color:var(--saffron); }
-  details { margin-top:14px; }
-  summary { cursor:pointer; color:var(--indigo); font-weight:700; font-size:13px; }
-  .adv { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:12px; }
-  .adv label { font-size:12px; color:var(--muted); display:block; margin-bottom:4px; }
-
-  .preview { background:var(--ink); color:#fff; border-radius:var(--radius); padding:18px 20px; min-width:0; overflow:hidden; }
+  @media (max-width:520px) { .modes { grid-template-columns:1fr; } }
+  .mode { position:relative; border:1.5px solid var(--border); border-radius:14px; padding:14px; cursor:pointer; background:#fff; transition:.15s; }
+  .mode.on { border-color:var(--primary); background:var(--primary-soft); }
+  .mode input { position:absolute; opacity:0; }
+  .mode b { display:block; font-size:16px; margin-bottom:2px; }
+  .mode span { color:var(--muted); font-size:13px; }
+  .preview { margin-top:14px; border-radius:12px; background:var(--bg); padding:12px 14px; }
+  .preview .t { font-size:13px; color:var(--muted); margin-bottom:8px; }
+  .out-files { display:flex; flex-wrap:wrap; gap:8px; }
+  .out-file { display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--border); border-radius:10px; padding:7px 10px; font-size:13px; font-weight:600; }
+  .out-file .lang { background:var(--accent-soft); color:var(--accent-text); border-radius:6px; padding:1px 6px; font-size:12px; }
+  .mini { width:100%; border-collapse:collapse; font-size:13px; background:#fff; }
+  .mini th, .mini td { border:1px solid var(--border); padding:7px 9px; text-align:left; white-space:nowrap; }
+  .mini th { background:var(--primary-soft); font-weight:700; } .mini th.new, .mini td.new { background:var(--accent-soft); }
   .scrollx { overflow-x:auto; }
-  .preview h3 { font-family:var(--display); font-weight:700; font-size:19px; margin:0 0 2px; }
-  .preview .sub { color:#B8BEDC; font-size:13px; margin-bottom:12px; }
-  .tree { font-family:var(--mono); font-size:12.5px; line-height:1.7; white-space:pre; overflow-x:auto; color:#DDE1F5; }
-  .tree .d { color:#F2B265; } .tree .f { color:#fff; } .tree .dim { color:#8A91B8; }
-  .mini { width:100%; border-collapse:collapse; font-size:12px; margin-top:6px; }
-  .mini th, .mini td { border:1px solid #3A4570; padding:5px 7px; text-align:left; white-space:nowrap; }
-  .mini th { background:#26305A; color:#F2B265; font-family:var(--display); font-weight:700; }
-  .mini td { color:#DDE1F5; }
-  .preview .note { color:#B8BEDC; font-size:12px; margin-top:10px; }
-  .card { background:var(--card); border:1px solid var(--mist); border-radius:var(--radius); padding:16px 18px; }
-  .err { color:var(--rust); font-size:13px; margin-top:8px; min-height:1em; }
+  .sub-opt { margin-top:10px; font-size:13px; color:var(--muted); display:flex; gap:14px; flex-wrap:wrap; }
+  .sub-opt label { display:flex; align-items:center; gap:6px; cursor:pointer; }
+  details.adv { margin-top:10px; } details.adv summary { color:var(--muted); font-size:13px; cursor:pointer; font-weight:600; }
+  .adv-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:12px; }
+  .adv-grid label { font-size:12px; color:var(--muted); display:block; margin-bottom:4px; font-weight:600; }
+  .check { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--fg); }
 
-  .bar { height:12px; background:var(--indigo-soft); border-radius:999px; overflow:hidden; margin:10px 0 8px; }
-  .bar > div { height:100%; width:0; background:linear-gradient(90deg,var(--indigo),var(--saffron)); transition:width .3s; }
-  .stats { display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; font-size:13px; color:var(--muted); }
-  .stats b { color:var(--ink); font-family:var(--mono); font-weight:600; }
-  .state { font-family:var(--display); font-weight:700; font-size:18px; }
-  .state.done { color:var(--leaf); } .state.running { color:var(--indigo); } .state.error, .state.stopped { color:var(--rust); }
-  #log { background:var(--paper); border-radius:8px; padding:8px 10px; max-height:150px; overflow:auto; font:11.5px/1.5 var(--mono); white-space:pre-wrap; color:var(--muted); margin-top:8px; }
-  .outs { list-style:none; padding:0; margin:10px 0 0; display:flex; flex-direction:column; gap:6px; }
-  .outs li { display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--leaf-soft); border-radius:8px; padding:7px 10px; font-size:13px; }
-  .outs li span { font-family:var(--mono); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .outs a { text-decoration:none; }
-  .warn { color:#9A5B00; font-size:12px; margin-top:8px; }
+  .cta { text-align:center; margin:6px 0 18px; }
+  .cta button { width:100%; max-width:420px; padding:16px; font-size:18px; border-radius:14px; }
+  .err { color:var(--bad); font-size:14px; margin-top:8px; min-height:1em; text-align:center; }
+
+  .bar { height:12px; background:var(--primary-soft); border-radius:999px; overflow:hidden; margin:10px 0; }
+  .bar > div { height:100%; width:0; background:linear-gradient(90deg,var(--primary),var(--accent)); transition:width .3s; }
+  .state { font-weight:800; font-size:18px; } .state.done { color:var(--ok); } .state.error, .state.stopped { color:var(--bad); }
+  .stats { display:flex; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--muted); }
+  .stats b { color:var(--fg); }
+  .results { list-style:none; padding:0; margin:12px 0 0; display:flex; flex-direction:column; gap:8px; }
+  .results li { display:flex; align-items:center; gap:10px; background:var(--ok-soft); border-radius:12px; padding:10px 12px; flex-wrap:wrap; }
+  .results li .name { font-weight:700; font-size:14px; flex:1 1 180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .results select { width:auto; padding:7px 10px; font-size:13px; border-radius:9px; }
+  #log { background:var(--bg); border-radius:8px; padding:8px 10px; max-height:140px; overflow:auto; font:11.5px/1.5 ui-monospace,Consolas,monospace; white-space:pre-wrap; color:var(--muted); margin-top:8px; }
+  .warn { color:var(--accent-text); font-size:12px; margin-top:8px; }
+
+  .about { margin-top:34px; }
+  .about h3 { font-size:24px; margin:0 0 14px; letter-spacing:-.01em; }
+  .benefits { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+  .benefit { background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:16px; }
+  .benefit b { display:block; font-size:16px; margin-bottom:4px; } .benefit span { color:var(--muted); font-size:14px; }
+  .app-block { background:var(--primary); color:#fff; border-radius:var(--r); padding:22px; margin-top:14px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .app-block b { font-size:20px; display:block; } .app-block span { opacity:.85; font-size:14px; }
+  .app-block a { margin-left:auto; background:#fff; color:var(--primary-dark); text-decoration:none; font-weight:700; padding:12px 18px; border-radius:12px; }
+  footer { color:var(--muted); font-size:13px; margin-top:34px; padding-top:16px; border-top:1px solid var(--border); display:flex; gap:14px; flex-wrap:wrap; }
+  footer a { color:var(--muted); }
   .hidden { display:none !important; }
-
   table.hist { width:100%; border-collapse:collapse; font-size:13px; }
-  .hist th, .hist td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--mist); vertical-align:middle; }
+  .hist th, .hist td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--border); }
   .hist th { color:var(--muted); font-weight:600; font-size:12px; }
-  .hist td.st { font-weight:700; }
-  .hist .done { color:var(--leaf); } .hist .running { color:var(--indigo); } .hist .error, .hist .stopped { color:var(--rust); }
   @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
 </style>
 </head>
 <body>
-<header>
-  <div style="display:flex;align-items:center;gap:12px">
-    <img src="/static/logo-small.png" alt="MultiTranslate logo" width="44" height="44" style="border-radius:11px;flex:none">
-    <div>
-    <div class="brand">Multi<span>Translate</span></div>
-    <div class="tag">Excel, CSV, Word, TXT, folders — 45+ languages</div>
-    </div>
-  </div>
-</header>
+<div class="wrap">
+  <header>
+    <a class="brand" href="/"><img src="/static/logo-small.png" alt="MultiTranslate logo">Multi<span>Translate</span></a>
+    <nav><a href="#app-block">Android app</a><a href="https://github.com/rushi0105/multitranslate" rel="noopener">Laptop</a></nav>
+  </header>
 
-<main>
-  <section>
-    <div class="step">
-      <div class="step-head"><span class="step-num">1</span><h2>Files</h2></div>
-      <div id="drop" role="button" tabindex="0" aria-label="Choose files or folder">
-        <b>Drop files or a folder here</b>
-        <small>or click to choose files · <u id="pickFolder">choose a folder</u></small>
-        <input type="file" id="fileInput" multiple>
-        <input type="file" id="folderInput" webkitdirectory directory multiple>
-      </div>
-      <div class="filelist" id="files"></div>
-      {% if not public %}<details style="margin-top:10px"><summary>Or type a file / folder path</summary><label for="localPath" class="sr-only">File or folder path</label>
-        <input type="text" id="localPath" placeholder="D:\data\comments.xlsx   or   D:\data\folder" autocomplete="off" style="margin-top:8px"></details>{% else %}<input type="hidden" id="localPath" value="">{% endif %}
-    </div>
+  <h1>Translate any file into <em>any language</em></h1>
+  <p class="lead">Excel, CSV, Word, TXT, JSON, subtitles. Drop it, pick languages, done. Free.</p>
 
-    <div class="step">
-      <div class="step-head"><span class="step-num">2</span><h2>Languages</h2></div>
-      <div class="langs" id="featured"></div>
-      <button class="more-toggle" id="moreBtn" aria-expanded="false">+ More languages</button>
-      <div class="langs hidden" id="more" style="margin-top:8px"></div>
-      <div style="display:flex; gap:8px; margin-top:12px; align-items:center">
-        <label for="addLang" class="sr-only">Language code</label><input type="text" id="addLang" placeholder="Language code, e.g. sd" style="max-width:220px" autocomplete="off">
-        <button class="btn-soft" id="addLangBtn">Add language</button>
-      </div>
-      <div class="selected-line" id="selectedLine"></div>
+  <section class="block" id="s1">
+    <h2><span class="n" id="n1">1</span> Files</h2>
+    <div id="drop" role="button" tabindex="0" aria-label="Choose files or a folder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      <b>Drop files or a folder here</b>
+      <small>or click to choose · <u id="pickFolder">choose a folder</u></small>
+      <input type="file" id="fileInput" multiple>
+      <input type="file" id="folderInput" webkitdirectory directory multiple>
     </div>
+    <div class="files" id="files"></div>
+    {% if not public %}<details class="path"><summary>Or type a file / folder path on this PC</summary>
+      <label for="localPath" class="sr-only">File or folder path</label>
+      <input type="text" id="localPath" placeholder="D:\data\comments.xlsx  or  D:\data\folder" autocomplete="off" style="margin-top:8px"></details>
+    {% else %}<input type="hidden" id="localPath" value="">{% endif %}
+  </section>
 
-    <div class="step">
-      <div class="step-head"><span class="step-num">3</span><h2>Output</h2></div>
-      <div class="modes">
-        <label class="mode on"><input type="radio" name="mode" value="separate" checked><span class="t">Separate files</span><div class="d">One folder per language</div></label>
-        <label class="mode"><input type="radio" name="mode" value="combined"><span class="t">One file, all languages</span><div class="d">Translated columns beside the original</div></label>
-      </div>
-      <div class="sub-opt hidden" id="sheetModeRow">
-        Excel layout:
-        <label><input type="radio" name="sheet_mode" value="columns" checked> extra columns in the same sheet</label>
-        <label><input type="radio" name="sheet_mode" value="sheets"> one sheet copy per language</label>
-      </div>
-      <details>
-        <summary>Advanced</summary>
-        <div class="adv">
-          <div><label for="source">Source language</label>
-            <select id="source"><option value="auto">Auto detect</option>{% for c in featured %}<option value="{{ c }}">{{ native[c] }} ({{ c }})</option>{% endfor %}</select></div>
-          <div><label for="workers">Threads</label><input type="number" id="workers" value="{{ defaults.workers }}" min="1" max="16"></div>
-          <div><label for="rps">Requests per second</label><input type="number" id="rps" value="{{ defaults.rps }}" min="0.5" max="10" step="0.5"></div>
-          <div><label for="autosave">Auto-save every N lines</label><input type="number" id="autosave" value="{{ defaults.autosave }}" min="10"></div>
-          <div><label for="glossary">Glossary file (.csv or .json)</label><input type="file" id="glossary" accept=".csv,.json"></div>
-          <div><label>&nbsp;</label><label style="color:var(--ink);font-size:13px"><input type="checkbox" id="protect" checked style="accent-color:var(--saffron)"> Keep links, #hashtags, {placeholders} unchanged</label></div>
-          <div><label>&nbsp;</label><label style="color:var(--ink);font-size:13px"><input type="checkbox" id="hinglish" checked style="accent-color:var(--saffron)"> Convert Hinglish to Hindi first</label></div>
-        </div>
-      </details>
+  <section class="block" id="s2">
+    <h2><span class="n" id="n2">2</span> Translate into</h2>
+    <div class="chips" id="chips"></div>
+    <div class="picker">
+      <label for="langSearch" class="sr-only">Search languages</label>
+      <input type="search" id="langSearch" placeholder="Search a language — Hindi, ਪੰਜਾਬੀ, Tamil, French …" autocomplete="off" aria-autocomplete="list" aria-controls="langList">
+      <ul id="langList" class="hidden" role="listbox"></ul>
     </div>
+  </section>
 
-    <details class="step" id="histBox">
-      <summary style="font-family:var(--display);font-size:17px;color:var(--ink)">History <button class="btn-soft btn-sm" id="refreshHist" style="margin-left:10px">Refresh</button></summary>
-      <table class="hist" style="margin-top:10px"><thead><tr><th>When</th><th>Input</th><th>Languages</th><th>Mode</th><th>Status</th><th></th></tr></thead>
-      <tbody id="hist"><tr><td colspan="6" style="color:var(--muted)">No jobs yet.</td></tr></tbody></table>
+  <section class="block" id="s3">
+    <h2><span class="n" id="n3">3</span> Output</h2>
+    <div class="modes">
+      <label class="mode on"><input type="radio" name="mode" value="separate" checked><b>A file per language</b><span>comments_hi.xlsx, comments_pa.xlsx …</span></label>
+      <label class="mode"><input type="radio" name="mode" value="combined"><b>One file, all languages</b><span>Translated columns next to the original</span></label>
+    </div>
+    <div class="sub-opt hidden" id="sheetModeRow">
+      <span>Excel:</span>
+      <label><input type="radio" name="sheet_mode" value="columns" checked> extra columns</label>
+      <label><input type="radio" name="sheet_mode" value="sheets"> a sheet per language</label>
+    </div>
+    <div class="preview" id="preview"><div class="t">Add files to see what you will get.</div><div id="pvBody"></div></div>
+    <details class="adv">
+      <summary>Advanced</summary>
+      <div class="adv-grid">
+        <div><label for="source">Source language</label>
+          <select id="source"><option value="auto">Auto detect</option>{% for c in featured %}<option value="{{ c }}">{{ native[c] }} ({{ c }})</option>{% endfor %}</select></div>
+        <div><label for="glossary">Glossary (.csv / .json)</label><input type="file" id="glossary" accept=".csv,.json"></div>
+        <div><label for="workers">Threads</label><input type="number" id="workers" value="{{ defaults.workers }}" min="1" max="16"></div>
+        <div><label for="rps">Requests / second</label><input type="number" id="rps" value="{{ defaults.rps }}" min="0.5" max="10" step="0.5"></div>
+        <div><label for="autosave">Auto-save every N lines</label><input type="number" id="autosave" value="{{ defaults.autosave }}" min="10"></div>
+        <div><label class="check" style="margin-top:22px"><input type="checkbox" id="protect" checked> Keep links, #tags, {placeholders}</label>
+             <label class="check" style="margin-top:8px"><input type="checkbox" id="hinglish" checked> Hinglish → Hindi first</label></div>
+      </div>
     </details>
   </section>
 
-  <aside class="rail">
-    <div class="preview">
-      <h3>You will get</h3>
-      <div class="sub" id="pvSub">Choose files and languages to see the result.</div>
-      <div id="pvBody"></div>
+  <div class="cta"><button class="b-primary" id="start" disabled>Translate</button><div class="err" id="formErr"></div></div>
+
+  <section class="block hidden" id="progressCard">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <span class="state" id="stState">Starting…</span>
+      <button class="b-danger sm hidden" id="stop">Stop</button>
     </div>
-    <div class="card">
-      <button class="btn-main" id="start">Start translation</button>
-      <div class="err" id="formErr"></div>
+    <div class="bar"><div id="barFill"></div></div>
+    <div class="stats"><span>Files <b id="stFiles">0/0</b></span><span>Lines <b id="stStrings">0/0</b></span><span>Time <b id="stElapsed">0s</b></span><span id="stCurrent"></span></div>
+    <div id="outputs"></div>
+    <details style="margin-top:8px"><summary style="font-size:13px;color:var(--muted);cursor:pointer">Log</summary><div id="log"></div></details>
+  </section>
+
+  <details class="block" id="histBox"><summary style="cursor:pointer;font-weight:700">Previous translations</summary>
+    <table class="hist" style="margin-top:10px"><thead><tr><th>When</th><th>File</th><th>Languages</th><th>Status</th><th></th></tr></thead>
+    <tbody id="hist"><tr><td colspan="5" style="color:var(--muted)">None yet.</td></tr></tbody></table></details>
+
+  <section class="about" id="about">
+    <h3>Why people use it</h3>
+    <div class="benefits">
+      <div class="benefit"><b>Whole files, not sentences</b><span>Thousands of rows, whole folders, all languages in one go. Layout, numbers, links and formulas stay intact.</span></div>
+      <div class="benefit"><b>Understands Hinglish</b><span>"aap bahut acche ho" becomes proper हिन्दी first, so Punjabi and English come out complete.</span></div>
+      <div class="benefit"><b>Private by design</b><span>No account. Uploads are deleted after 12 hours. Or run it on your own laptop and nothing leaves your PC.</span></div>
     </div>
-    <div class="card hidden" id="progressCard">
-      <div style="display:flex; justify-content:space-between; align-items:center">
-        <span class="state" id="stState">Starting…</span>
-        <button class="btn-stop btn-sm hidden" id="stop">Stop</button>
-      </div>
-      <div class="bar"><div id="barFill"></div></div>
-      <div class="stats">
-        <span>Files <b id="stFiles">0/0</b></span><span>Strings <b id="stStrings">0/0</b></span>
-        <span>Requests <b id="stReq">0</b></span><span>Time <b id="stElapsed">0s</b></span>
-      </div>
-      <div style="font-size:12px;color:var(--muted);margin-top:4px" id="stCurrent"></div>
-      <div id="outputs"></div>
-      <details style="margin-top:8px"><summary>Log</summary><div id="log"></div></details>
+    <div class="app-block" id="app-block">
+      <div><b>Android app</b><span>Same tool, on your phone. Not on the Play Store — download and install directly.</span></div>
+      <a href="/download/MultiTranslate.apk">Download APK</a>
     </div>
-  </aside>
-</main>
+  </section>
+
+  <footer><span>© 2026 MultiTranslate</span><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/refund.html">Refunds</a><a href="/cookies.html">Cookies</a></footer>
+</div>
 
 <script>
 const LANGS = {{ languages | tojson }};
 const NATIVE = {{ native | tojson }};
 const FEATURED = {{ featured | tojson }};
 const PUBLIC = {{ public | tojson }};
-const myJobs = () => { try { return JSON.parse(localStorage.getItem("mt_jobs") || "[]"); } catch (e) { return []; } };
-const rememberJob = id => { try { localStorage.setItem("mt_jobs", JSON.stringify([id, ...myJobs().filter(x => x !== id)].slice(0, 50))); } catch (e) {} };
-const EXT_TABLE = ["xlsx", "xlsm", "csv", "tsv"];
+const TABLE_EXT = ["xlsx", "xlsm", "csv", "tsv"];
 let selected = ["hi", "pa"];
-let extra = {};
 let files = [];
 let jobId = null, timer = null;
 const $ = id => document.getElementById(id);
 const api = (url, opts = {}) => fetch(url, { ...opts, headers: { "X-Requested-With": "fetch", ...(opts.headers || {}) } });
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const nativeOf = c => NATIVE[c] || LANGS[c] || c;
-const esc = s => String(s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+const myJobs = () => { try { return JSON.parse(localStorage.getItem("mt_jobs") || "[]"); } catch (e) { return []; } };
+const rememberJob = id => { try { localStorage.setItem("mt_jobs", JSON.stringify([id, ...myJobs().filter(x => x !== id)].slice(0, 50))); } catch (e) {} };
+try { const s = JSON.parse(localStorage.getItem("mt_langs") || "null"); if (Array.isArray(s) && s.length) selected = s; } catch (e) {}
 
-// ---------- languages: fixed order, never re-sorted on click
-function langButton(code) {
-  const on = selected.includes(code);
-  return `<button type="button" class="lang" data-code="${code}" aria-pressed="${on}">
-    <span class="tick">${on ? "✓" : ""}</span>
-    <span><span class="native">${esc(nativeOf(code))}</span><span class="en">${esc(LANGS[code] || "custom")} · ${code}</span></span>
-    ${extra[code] ? `<span class="del" data-del="${code}" title="Remove">×</span>` : ""}</button>`;
+// ---------- languages: selected chips + quick suggestions + search
+function renderChips() {
+  const quick = FEATURED.filter(c => !selected.includes(c)).slice(0, 5);
+  $("chips").innerHTML =
+    selected.map(c => `<button type="button" class="chip on" data-code="${c}" aria-label="Remove ${esc(LANGS[c] || c)}">${esc(nativeOf(c))} <span class="x">×</span></button>`).join("") +
+    quick.map(c => `<button type="button" class="chip add" data-code="${c}">+ ${esc(nativeOf(c))}</button>`).join("");
+  try { localStorage.setItem("mt_langs", JSON.stringify(selected)); } catch (e) {}
+  renderPreview(); updateSteps();
 }
-function renderLangs() {
-  $("featured").innerHTML = FEATURED.map(langButton).join("") + Object.keys(extra).map(langButton).join("");
-  $("more").innerHTML = Object.keys(LANGS).filter(c => !FEATURED.includes(c)).sort((a, b) => LANGS[a].localeCompare(LANGS[b])).map(langButton).join("");
-  $("selectedLine").innerHTML = selected.length
-    ? `Selected (${selected.length}): <b>${selected.map(c => esc(nativeOf(c))).join(" · ")}</b>`
-    : `No language selected.`;
-  renderPreview();
-}
-function onLangClick(e) {
-  const del = e.target.closest("[data-del]");
-  if (del) { const c = del.dataset.del; delete extra[c]; selected = selected.filter(x => x !== c); renderLangs(); return; }
-  const btn = e.target.closest(".lang"); if (!btn) return;
+$("chips").addEventListener("click", e => {
+  const btn = e.target.closest(".chip"); if (!btn) return;
   const c = btn.dataset.code;
   selected = selected.includes(c) ? selected.filter(x => x !== c) : [...selected, c];
-  renderLangs();
+  renderChips();
+});
+const search = $("langSearch"), list = $("langList");
+let activeIdx = -1;
+function matches(q) {
+  q = q.trim().toLowerCase();
+  const all = Object.keys(LANGS).filter(c => !selected.includes(c));
+  const hits = all.filter(c => !q || c.toLowerCase().startsWith(q) || LANGS[c].toLowerCase().includes(q) || (NATIVE[c] || "").toLowerCase().includes(q));
+  if (q && /^[a-z]{2,3}(-[a-z]{2,4})?$/i.test(q) && !LANGS[q] && !hits.includes(q)) hits.push(q);
+  return hits.slice(0, 12);
 }
-$("featured").addEventListener("click", onLangClick);
-$("more").addEventListener("click", onLangClick);
-$("moreBtn").onclick = () => { const open = $("more").classList.toggle("hidden"); $("moreBtn").setAttribute("aria-expanded", String(!open)); $("moreBtn").textContent = open ? "+ More languages" : "− Fewer languages"; };
-function addLangs() {
-  $("addLang").value.split(/[,\s;]+/).map(s => s.trim()).filter(s => /^[a-zA-Z]{2,3}(-[a-zA-Z]{2,4})?$/.test(s)).forEach(c => {
-    if (!LANGS[c]) extra[c] = c;
-    if (!selected.includes(c)) selected.push(c);
-  });
-  $("addLang").value = ""; renderLangs();
+function showList() {
+  const hits = matches(search.value);
+  activeIdx = -1;
+  list.innerHTML = hits.map(c => `<li role="option" data-code="${c}"><span>${esc(nativeOf(c))}</span><small>${esc(LANGS[c] || "custom code")} · ${c}</small></li>`).join("");
+  list.classList.toggle("hidden", !hits.length);
 }
-$("addLangBtn").onclick = addLangs;
-$("addLang").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addLangs(); } });
+function pick(c) { if (!selected.includes(c)) selected.push(c); search.value = ""; list.classList.add("hidden"); renderChips(); search.focus(); }
+search.addEventListener("input", showList);
+search.addEventListener("focus", showList);
+search.addEventListener("keydown", e => {
+  const items = [...list.querySelectorAll("li")];
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); activeIdx = (activeIdx + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length; items.forEach((li, i) => li.classList.toggle("active", i === activeIdx)); }
+  else if (e.key === "Enter") { e.preventDefault(); const li = items[activeIdx] || items[0]; if (li) pick(li.dataset.code); }
+  else if (e.key === "Escape") list.classList.add("hidden");
+});
+list.addEventListener("mousedown", e => { const li = e.target.closest("li"); if (li) { e.preventDefault(); pick(li.dataset.code); } });
+document.addEventListener("click", e => { if (!e.target.closest(".picker")) list.classList.add("hidden"); });
 
 // ---------- files
 const drop = $("drop");
 drop.addEventListener("click", e => { if (e.target.id !== "pickFolder") $("fileInput").click(); });
 drop.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("fileInput").click(); } });
 $("pickFolder").addEventListener("click", e => { e.stopPropagation(); $("folderInput").click(); });
-$("fileInput").onchange = e => setFiles([...e.target.files]);
-$("folderInput").onchange = e => setFiles([...e.target.files].map(f => { f.relPath = f.webkitRelativePath; return f; }));
+$("fileInput").onchange = e => setFiles([...files, ...e.target.files]);
+$("folderInput").onchange = e => setFiles([...files, ...[...e.target.files].map(f => { f.relPath = f.webkitRelativePath; return f; })]);
 ["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
 ["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
 drop.addEventListener("drop", async e => {
   const out = [];
   async function walk(entry, prefix) {
     if (entry.isFile) { const f = await new Promise(r => entry.file(r)); f.relPath = prefix + entry.name; out.push(f); }
-    else if (entry.isDirectory) {
-      const reader = entry.createReader(); let batch;
-      do { batch = await new Promise(r => reader.readEntries(r)); for (const en of batch) await walk(en, prefix + entry.name + "/"); } while (batch.length);
-    }
+    else if (entry.isDirectory) { const reader = entry.createReader(); let batch;
+      do { batch = await new Promise(r => reader.readEntries(r)); for (const en of batch) await walk(en, prefix + entry.name + "/"); } while (batch.length); }
   }
   for (const it of [...e.dataTransfer.items]) { const en = it.webkitGetAsEntry && it.webkitGetAsEntry(); if (en) await walk(en, ""); }
-  setFiles(out.length ? out : [...e.dataTransfer.files]);
+  setFiles([...files, ...(out.length ? out : [...e.dataTransfer.files])]);
 });
 function setFiles(list) {
   files = list; if (list.length) $("localPath").value = "";
-  const mb = (files.reduce((a, f) => a + f.size, 0) / 1048576).toFixed(1);
-  $("files").innerHTML = files.length
-    ? `${files.length} file(s), ${mb} MB ` + files.slice(0, 6).map(f => `<span class="pill">${esc(f.relPath || f.name)}</span>`).join("") + (files.length > 6 ? "…" : "") + `<span class="clear" id="clearFiles">clear</span>`
-    : "";
-  const clr = $("clearFiles"); if (clr) clr.onclick = () => setFiles([]);
-  renderPreview();
+  $("files").innerHTML = files.map((f, i) => `<span class="file" title="${esc(f.relPath || f.name)}"><span>${esc(f.relPath || f.name)}</span><span class="x" data-i="${i}" role="button" aria-label="Remove">×</span></span>`).join("");
+  renderPreview(); updateSteps();
 }
-$("localPath").addEventListener("input", () => { if ($("localPath").value.trim()) { files = []; $("files").innerHTML = ""; } renderPreview(); });
+$("files").addEventListener("click", e => { const x = e.target.closest(".x"); if (x) setFiles(files.filter((_, i) => i !== +x.dataset.i)); });
+$("localPath").addEventListener("input", () => { if ($("localPath").value.trim()) { files = []; $("files").innerHTML = ""; } renderPreview(); updateSteps(); });
+const hasInput = () => files.length > 0 || !!$("localPath").value.trim();
 
-// ---------- output mode
-document.querySelectorAll("input[name=mode]").forEach(r => r.addEventListener("change", () => {
-  document.querySelectorAll(".mode").forEach(m => m.classList.toggle("on", m.querySelector("input").checked));
-  $("sheetModeRow").classList.toggle("hidden", mode() !== "combined");
-  renderPreview();
-}));
-document.querySelectorAll("input[name=sheet_mode]").forEach(r => r.addEventListener("change", renderPreview));
+// ---------- mode + preview
 const mode = () => document.querySelector("input[name=mode]:checked").value;
 const sheetMode = () => document.querySelector("input[name=sheet_mode]:checked").value;
-
-// ---------- live preview: the one thing this page must make obvious
+document.querySelectorAll("input[name=mode]").forEach(r => r.addEventListener("change", () => {
+  document.querySelectorAll(".mode").forEach(m => m.classList.toggle("on", m.querySelector("input").checked));
+  $("sheetModeRow").classList.toggle("hidden", mode() !== "combined"); renderPreview();
+}));
+document.querySelectorAll("input[name=sheet_mode]").forEach(r => r.addEventListener("change", renderPreview));
 function sampleNames() {
-  if (files.length) return files.slice(0, 3).map(f => (f.relPath || f.name));
+  if (files.length) return files.slice(0, 3).map(f => (f.relPath || f.name).split("/").pop());
   const p = $("localPath").value.trim().replace(/\\/g, "/");
-  if (p) { const last = p.split("/").filter(Boolean).pop() || "file"; return /\.\w{2,5}$/.test(last) ? [last] : [last + "/comments.xlsx", last + "/notes.txt"]; }
-  return ["comments.xlsx", "notes.txt"];
+  if (p) { const last = p.split("/").filter(Boolean).pop() || "file"; return /\.\w{2,5}$/.test(last) ? [last] : [last + " (folder)"]; }
+  return [];
 }
 function renderPreview() {
-  const names = sampleNames();
-  const langs = selected;
-  if (!langs.length) { $("pvSub").textContent = "Select at least one language."; $("pvBody").innerHTML = ""; return; }
-  const hasTable = names.some(n => EXT_TABLE.includes(n.split(".").pop().toLowerCase()));
+  const names = sampleNames(), t = $("preview").querySelector(".t"), body = $("pvBody");
+  if (!names.length || !selected.length) { t.textContent = !names.length ? "Add files to see what you will get." : "Pick at least one language."; body.innerHTML = ""; return; }
+  const isTable = n => TABLE_EXT.includes((n.split(".").pop() || "").toLowerCase());
+  const split = n => { const m = n.match(/^(.*?)(\.\w+)?$/); return [m[1], m[2] || ""]; };
   if (mode() === "separate") {
-    $("pvSub").textContent = `${langs.length} folder${langs.length > 1 ? "s" : ""} — one full copy of each file per language.`;
-    let t = `<span class="d">output/</span>\n`;
-    langs.slice(0, 4).forEach(l => {
-      t += `  <span class="d">${l}/</span>   <span class="dim">${esc(nativeOf(l))}</span>\n`;
-      names.slice(0, 2).forEach(n => { const m = n.match(/^(.*?)(\.\w+)?$/); t += `    <span class="f">${esc(m[1].split("/").pop())}_${l}${m[2] || ""}</span>\n`; });
-    });
-    if (langs.length > 4) t += `  <span class="dim">… +${langs.length - 4} more</span>\n`;
-    $("pvBody").innerHTML = `<div class="tree">${t}</div>`;
+    const total = Math.max(files.length, 1) * selected.length;
+    t.textContent = `You get ${total} file${total > 1 ? "s" : ""} — one copy of each file per language:`;
+    body.innerHTML = `<div class="out-files">` + names.flatMap(n => selected.map(l => { const [s, e] = split(n); return `<span class="out-file">${esc(s)}<span class="lang">${esc(nativeOf(l))}</span>${esc(e)}</span>`; })).join("") + (files.length > 3 ? `<span class="out-file">… +${(files.length - 3) * selected.length} more</span>` : "") + `</div>`;
+  } else if (names.some(isTable) && sheetMode() === "columns") {
+    t.textContent = "You get one file — each column gets a translated column next to it:";
+    body.innerHTML = `<div class="scrollx"><table class="mini"><tr><th>Comment</th>${selected.map(l => `<th class="new">Comment (${esc(nativeOf(l))})</th>`).join("")}</tr><tr><td>Great soap!</td>${selected.map(l => `<td class="new">${esc(sample(l))}</td>`).join("")}</tr></table></div>`;
+  } else if (names.some(isTable)) {
+    t.textContent = "You get one file — the original sheet plus one translated sheet per language:";
+    body.innerHTML = `<div class="out-files"><span class="out-file">Sheet1</span>${selected.map(l => `<span class="out-file">Sheet1 <span class="lang">${esc(nativeOf(l))}</span></span>`).join("")}</div>`;
   } else {
-    const sm = sheetMode();
-    $("pvSub").textContent = hasTable && sm === "columns" ? "One file — a translated column next to each original column." :
-      hasTable ? "One file — original sheet plus one translated sheet per language." : "One file — original text followed by each language.";
-    let body;
-    if (hasTable && sm === "columns") {
-      const cols = ["Comment", ...langs.map(l => `Comment (${nativeOf(l)})`), "Rating"];
-      body = `<div class="scrollx"><table class="mini"><tr>${cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr><tr><td>Great soap!</td>${langs.map(l => `<td>${esc(sampleWord(l))}</td>`).join("")}<td>5</td></tr></table></div>`;
-    } else if (hasTable) {
-      body = `<div class="tree"><span class="f">${esc(names[0].split("/").pop().replace(/\.\w+$/, ""))}_multi.xlsx</span>\n  <span class="d">Sheet1</span>  <span class="dim">original</span>\n${langs.map(l => `  <span class="d">Sheet1 (${l})</span>  <span class="dim">${esc(nativeOf(l))}</span>`).join("\n")}</div>`;
-    } else {
-      body = `<div class="tree"><span class="f">${esc(names[0].split("/").pop().replace(/(\.\w+)$/, "_multi$1"))}</span>\n  <span class="dim">===== Original =====</span>\n${langs.map(l => `  <span class="d">===== ${esc(nativeOf(l))} (${l}) =====</span>`).join("\n")}</div>`;
-    }
-    $("pvBody").innerHTML = body + `<div class="note">Numbers, emails, links, formulas and {placeholders} stay unchanged.</div>`;
+    t.textContent = "You get one file — the original text, then each language below it:";
+    body.innerHTML = `<div class="out-files"><span class="out-file">Original</span>${selected.map(l => `<span class="out-file"><span class="lang">${esc(nativeOf(l))}</span></span>`).join("")}</div>`;
   }
 }
-function sampleWord(l) { return { hi: "बढ़िया साबुन!", pa: "ਵਧੀਆ ਸਾਬਣ!", en: "Great soap!", mr: "छान साबण!", gu: "સરસ સાબુ!", ta: "சிறந்த சோப்!", te: "గొప్ప సబ్బు!", bn: "দারুণ সাবান!", ur: "زبردست صابن!" }[l] || "…"; }
+function sample(l) { return { hi: "बढ़िया साबुन!", pa: "ਵਧੀਆ ਸਾਬਣ!", en: "Great soap!", mr: "छान साबण!", gu: "સરસ સાબુ!", ta: "சிறந்த சோப்!", te: "గొప్ప సబ్బు!", bn: "দারুণ সাবান!", ur: "زبردست صابن!", es: "¡Gran jabón!", fr: "Super savon !" }[l] || "…"; }
+function updateSteps() {
+  $("n1").classList.toggle("done", hasInput()); $("n1").textContent = hasInput() ? "✓" : "1";
+  $("n2").classList.toggle("done", selected.length > 0); $("n2").textContent = selected.length ? "✓" : "2";
+  $("start").disabled = !(hasInput() && selected.length);
+  $("start").textContent = hasInput() && selected.length ? `Translate into ${selected.length} language${selected.length > 1 ? "s" : ""}` : "Translate";
+}
 
-// ---------- start / poll / stop / resume
+// ---------- run
 $("start").onclick = async () => {
   $("formErr").textContent = "";
-  if (!selected.length) return $("formErr").textContent = "Select at least one language (step 2).";
   const fd = new FormData();
-  fd.append("targets", selected.join(","));
-  fd.append("mode", mode()); fd.append("sheet_mode", sheetMode());
-  fd.append("source", $("source").value); fd.append("workers", $("workers").value);
-  fd.append("rps", $("rps").value); fd.append("autosave", $("autosave").value);
-  fd.append("protect", $("protect").checked ? "1" : "0");
-  fd.append("hinglish", $("hinglish").checked ? "1" : "0");
+  fd.append("targets", selected.join(",")); fd.append("mode", mode()); fd.append("sheet_mode", sheetMode());
+  fd.append("source", $("source").value); fd.append("workers", $("workers").value); fd.append("rps", $("rps").value); fd.append("autosave", $("autosave").value);
+  fd.append("protect", $("protect").checked ? "1" : "0"); fd.append("hinglish", $("hinglish").checked ? "1" : "0");
   if ($("glossary").files[0]) fd.append("glossary", $("glossary").files[0]);
   if ($("localPath").value.trim()) fd.append("local_path", $("localPath").value.trim());
-  else if (!files.length) return $("formErr").textContent = "Add files, a folder, or a path (step 1).";
   else files.forEach(f => fd.append("files", f, f.relPath || f.name));
   $("start").disabled = true; $("start").textContent = "Uploading…";
   let r, j;
   try { r = await api("/jobs", { method: "POST", body: fd }); j = await r.json(); }
-  catch (e) { j = { error: "Cannot reach MultiTranslate. Is it running on this PC?" }; r = { ok: false }; }
-  $("start").disabled = false; $("start").textContent = "Start translation";
-  if (!r.ok) return $("formErr").textContent = j.error || "Failed";
-  rememberJob(j.id);
-  watch(j.id);
+  catch (e) { j = { error: "Cannot reach the server. Check your connection and try again." }; r = { ok: false }; }
+  updateSteps();
+  if (!r.ok) return $("formErr").textContent = j.error || "Something went wrong";
+  rememberJob(j.id); watch(j.id);
 };
 $("stop").onclick = () => api(`/jobs/${jobId}/stop`, { method: "POST" });
-function watch(id) {
-  jobId = id; clearTimeout(timer);
-  $("progressCard").classList.remove("hidden"); $("outputs").innerHTML = ""; poll();
-  $("progressCard").scrollIntoView({ block: "nearest" });
-}
-const STATE_LABEL = { running: "Translating…", done: "Done ✓", error: "Finished with errors", stopped: "Stopped", idle: "Waiting" };
+function watch(id) { jobId = id; clearTimeout(timer); $("progressCard").classList.remove("hidden"); $("outputs").innerHTML = ""; poll(); $("progressCard").scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+const LABEL = { running: "Translating…", done: "Done", error: "Finished with errors", stopped: "Stopped", idle: "Waiting" };
+const FMT = { ".xlsx": "Excel (.xlsx)", ".csv": "CSV (.csv)", ".tsv": "TSV (.tsv)", ".docx": "Word (.docx)", ".txt": "Text (.txt)", ".md": "Markdown (.md)", ".json": "JSON", ".srt": "SRT", ".vtt": "VTT" };
 async function poll() {
   const r = await api(`/jobs/${jobId}`); if (!r.ok) return;
   const s = await r.json();
-  const filePct = s.files_total ? s.files_done / s.files_total : 0;
-  const strPct = s.strings_total ? s.strings_done / s.strings_total : 0;
+  const filePct = s.files_total ? s.files_done / s.files_total : 0, strPct = s.strings_total ? s.strings_done / s.strings_total : 0;
   const pct = Math.min(100, Math.round((filePct + strPct / Math.max(s.files_total, 1)) * 100));
   $("barFill").style.width = pct + "%";
-  const st = $("stState"); st.textContent = `${STATE_LABEL[s.state] || s.state} ${s.state === "running" ? pct + "%" : ""}`; st.className = "state " + s.state;
-  $("stFiles").textContent = `${s.files_done}/${s.files_total}`;
-  $("stStrings").textContent = `${s.strings_done}/${s.strings_total}`;
-  $("stReq").textContent = s.requests_made; $("stElapsed").textContent = s.elapsed + "s";
-  $("stCurrent").textContent = s.current_file && s.state === "running" ? `${s.current_file} → ${s.current_lang}` : "";
+  const st = $("stState"); st.textContent = `${LABEL[s.state] || s.state}${s.state === "running" ? " " + pct + "%" : ""}`; st.className = "state " + s.state;
+  $("stFiles").textContent = `${s.files_done}/${s.files_total}`; $("stStrings").textContent = `${s.strings_done}/${s.strings_total}`; $("stElapsed").textContent = s.elapsed + "s";
+  $("stCurrent").textContent = s.current_file && s.state === "running" ? `${s.current_file} → ${nativeOf(s.current_lang)}` : "";
   const log = $("log"); log.textContent = s.log.join("\n"); log.scrollTop = log.scrollHeight;
   const running = s.state === "running";
   $("stop").classList.toggle("hidden", !running); $("start").disabled = running;
   if (running) { timer = setTimeout(poll, 700); return; }
-  let html = `<div style="font-size:12px;color:var(--muted);margin-top:8px">Saved in: <code style="font-family:var(--mono)">${esc(s.output_dir)}</code></div>`;
-  if (s.outputs.length) html += `<a href="/jobs/${jobId}/download" style="display:block;margin-top:10px"><button class="btn-main" style="background:var(--leaf)">Download all (.zip)</button></a>` +
-    `<ul class="outs">` + s.outputs.map(p => `<li><span title="${esc(p)}">${esc(p)}</span><a href="/jobs/${jobId}/files/${encodeURI(p)}"><button class="btn-soft btn-sm">Download</button></a></li>`).join("") + "</ul>";
-  if (s.state !== "done") html += `<button class="btn-soft" style="margin-top:10px" onclick="resume('${jobId}')">Resume</button>`;
-  if (s.warnings && s.warnings.length) html += `<div class="warn">${s.warnings.slice(0, 8).map(w => "⚠ " + esc(w)).join("<br>")}</div>`;
-  if (s.errors.length) html += `<div class="err">${s.errors.map(e => "✕ " + esc(e)).join("<br>")}</div>`;
+  updateSteps();
+  let html = "";
+  if (s.outputs.length) {
+    html += `<ul class="results">` + s.outputs.map((p, i) => {
+      const opts = (s.formats && s.formats[p]) || [];
+      const sel = opts.length > 1 ? `<label class="sr-only" for="fmt${i}">Format</label><select id="fmt${i}">${opts.map(o => `<option value="${o}">${FMT[o] || o}</option>`).join("")}</select>` : "";
+      return `<li><span class="name" title="${esc(p)}">${esc(p)}</span>${sel}<button class="b-primary sm" data-dl="${esc(p)}" data-i="${i}">Download</button></li>`;
+    }).join("") + `</ul>`;
+    if (s.outputs.length > 1) html += `<p style="margin:10px 0 0"><a href="/jobs/${jobId}/download"><button class="b-soft">Download all (${s.outputs.length} files, zip)</button></a></p>`;
+  }
+  if (s.state !== "done") html += `<p style="margin:10px 0 0"><button class="b-soft" onclick="resume('${jobId}')">Resume</button></p>`;
+  if (s.warnings && s.warnings.length) html += `<div class="warn">${s.warnings.slice(0, 6).map(w => "⚠ " + esc(w)).join("<br>")}</div>`;
+  if (s.errors.length) html += `<div class="err" style="text-align:left">${s.errors.map(e => "✕ " + esc(e)).join("<br>")}</div>`;
   $("outputs").innerHTML = html;
+  $("outputs").querySelectorAll("[data-dl]").forEach(b => b.onclick = () => {
+    const sel = $("fmt" + b.dataset.i); const fmt = sel ? sel.value : "";
+    const p = b.dataset.dl; const own = "." + p.split(".").pop().toLowerCase();
+    location.href = `/jobs/${jobId}/files/${encodeURI(p)}` + (fmt && fmt !== own ? `?as=${encodeURIComponent(fmt)}` : "");
+  });
   loadHistory();
 }
-async function resume(id) {
-  const r = await api(`/jobs/${id}/resume`, { method: "POST" }); const j = await r.json();
-  if (!r.ok) return alert(j.error || "cannot resume");
-  watch(id);
-}
-async function removeJob(id) {
-  if (!confirm("Delete this job and its output files?")) return;
-  await api(`/jobs/${id}`, { method: "DELETE" });
-  if (id === jobId) $("progressCard").classList.add("hidden");
-  loadHistory();
-}
+async function resume(id) { const r = await api(`/jobs/${id}/resume`, { method: "POST" }); const j = await r.json(); if (!r.ok) return alert(j.error || "cannot resume"); watch(id); }
+async function removeJob(id) { if (!confirm("Delete this translation and its files?")) return; await api(`/jobs/${id}`, { method: "DELETE" }); if (id === jobId) $("progressCard").classList.add("hidden"); loadHistory(); }
 async function loadHistory() {
   const r = await api(PUBLIC ? "/jobs?ids=" + encodeURIComponent(myJobs().join(",")) : "/jobs"); const jobs = await r.json();
   if (!jobs.length) return;
-  $("hist").innerHTML = jobs.map(j => `<tr>
-    <td>${new Date(j.created * 1000).toLocaleString([], { dateStyle: "short", timeStyle: "short" })}</td>
-    <td title="${esc(j.input)}">${esc(j.input.split(/[\\/]/).slice(-1)[0])}</td>
-    <td>${j.targets.map(nativeOf).map(esc).join(", ")}</td><td>${j.mode}</td>
-    <td class="st ${j.state}">${STATE_LABEL[j.state] || j.state} ${j.files_done}/${j.files_total}</td>
-    <td style="white-space:nowrap">
-      <button class="btn-soft btn-sm" onclick="watch('${j.id}')">Open</button>
-      ${j.outputs ? `<a href="/jobs/${j.id}/download"><button class="btn-soft btn-sm">Zip</button></a>` : ""}
-      ${j.state !== "done" && j.state !== "running" ? `<button class="btn-soft btn-sm" onclick="resume('${j.id}')">Resume</button>` : ""}
-      <button class="btn-stop btn-sm" onclick="removeJob('${j.id}')">Delete</button>
-    </td></tr>`).join("");
+  $("hist").innerHTML = jobs.map(j => `<tr><td>${new Date(j.created * 1000).toLocaleString([], { dateStyle: "short", timeStyle: "short" })}</td>
+    <td title="${esc(j.input)}">${esc(j.input.split(/[\\/]/).slice(-1)[0])}</td><td>${j.targets.map(nativeOf).map(esc).join(", ")}</td>
+    <td>${LABEL[j.state] || j.state} ${j.files_done}/${j.files_total}</td>
+    <td style="white-space:nowrap"><button class="b-soft sm" onclick="watch('${j.id}')">Open</button> <button class="b-ghost sm" onclick="removeJob('${j.id}')">Delete</button></td></tr>`).join("");
 }
-$("refreshHist").onclick = e => { e.preventDefault(); loadHistory(); };
-renderLangs(); loadHistory();
+renderChips(); updateSteps(); loadHistory();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
 </script>
 </body>
