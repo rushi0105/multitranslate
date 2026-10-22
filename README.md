@@ -101,6 +101,11 @@ android/              phone app        tests/              pytest suite
 - Hinglish transliteration is word-level: names can come out wrong ("Mann" → मैं). Fix with a glossary.
 - Machine translation: review anything public-facing.
 
+## Licence
+
+MIT - see [LICENSE](LICENSE). Free to use, modify, and redistribute,
+including commercially, provided the copyright and permission notices stay with the project.
+
 ## Licences of dependencies
 
 Flask (BSD-3), requests (Apache-2.0), openpyxl (MIT), python-docx (MIT), Pillow (MIT-CMU),
